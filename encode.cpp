@@ -10,7 +10,7 @@ Repeat steps till we get one frequency (should be equal to character length of t
 
 */
 
-#include "node.h"
+#include "encode.h"
 
 #include <iostream>
 #include <string>
@@ -21,8 +21,6 @@ Repeat steps till we get one frequency (should be equal to character length of t
 #include <utility>
 
 using namespace std;
-
-typedef vector<pair<char, int> > table;
 
 void printfTable(table t) {
 	for (table::iterator it = t.begin(); it != t.end(); ++it) {
@@ -62,25 +60,31 @@ table getFrequencies(string message) {
 	return fTable;
 }
 
-// insert from vector<...> into priority queue
-
 struct nodeComp{
-	bool operator()(const node* f, const node* s){
-		return f->freq < s->freq;
-	}
+	bool operator()(const node* f, const node* s) { return f->freq > s->freq; }
 };
 
-void buildTree(table fTable) {
+node* buildTree(table& fTable) {
 	priority_queue<node*, vector<node*>, nodeComp > huffTree;
 	for (table::iterator it = fTable.begin(); it != fTable.end(); ++it) {
 		huffTree.push(new node(it->first, it->second, NULL, NULL));
-		cout << "top element is" << huffTree.top()->ch << huffTree.top()->freq <<endl;
 	}
-	cout << "size: " << huffTree.size();
+	while (huffTree.size() > 1) {
+		node* r = huffTree.top();
+		huffTree.pop();
+		node* l = huffTree.top();
+		huffTree.pop();
+		int newFreq = r->freq + l->freq;
+		node* combined = new node(newFreq, l, r);
+		huffTree.push(combined);
+	}
+	return huffTree.top();
 }
 
+
+
 int main() {
-	string testMessage = "TTTTThis is a test message with lots of words, and phrases and special characters!!#~*";
+	string testMessage = "This is a test message with lots of words, and phrases and special characters!!#~*";
 	table testTable = getFrequencies(testMessage);
 	cout << "Message: " << testMessage << endl;
 	cout << "Frequency Table: " << endl;

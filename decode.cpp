@@ -1,3 +1,5 @@
+#include "node.h"
+
 #include <string>
 #include <iostream>
 using namespace std;
@@ -7,13 +9,6 @@ using namespace std;
 // TODO: read up on improvements to huffman coding
 // TODO: write better tests
 // TODO: write `encode`
-
-struct node {
-    int freq;
-    char data;
-    node * left;
-    node * right;
-};
 
 bool is_leaf(node * n) {
     return !(n->left || n->right);
