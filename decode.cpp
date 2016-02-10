@@ -10,6 +10,7 @@ using namespace std;
 // TODO: write better tests
 // TODO: write `encode`
 
+// naive and slow
 string decode_huff(node * root,string s) {
     if (!root) return "";
     node * n = root;
@@ -21,13 +22,12 @@ string decode_huff(node * root,string s) {
             n = n->right;
         }
         
-        if (is_leaf(n)) {
+        if (n->is_leaf()) {
             res += n->data;
             n = root;
         }
     }
-    cout << res;
     return res;
 }
 
-
+// will rewrite this with bimaps probably

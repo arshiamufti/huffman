@@ -11,11 +11,11 @@ Repeat steps till we get one frequency (should be equal to character length of t
 */
 
 #include "encode.h"
+#include "decode.h"
 #include "node.h"
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <map>
 #include <queue>
 #include <vector>
 #include <utility>
@@ -40,7 +40,6 @@ void insert(table &fTable, char c) {
 	if (!inserted) {
 		pair<char, int> ins(c, 1);
 		fTable.push_back(ins);
-		fTable.push_back(make_pair('t', 7));
 	}
 }
 
@@ -80,7 +79,7 @@ node* buildTree(table& fTable) {
 	}
 	return huffTree.top();
 }
-
+ 
 void generateCode(node* huffTree, huffTable& codes, string code = "") {
 	if (huffTree->is_leaf()) {
 		codes[huffTree->data] =  code;
@@ -94,6 +93,21 @@ void generateCode(node* huffTree, huffTable& codes, string code = "") {
 	}
 }
 
+vector<string> encode(huffTable& ht, string message) {
+	vector<string> res;
+	for (int i = 0; i < message.length(); ++i) {
+		char ch = message[i];
+		res.push_back(ht[ch]);
+	}
+	return res;
+}
+
+string convertToString (vector<string> s) {
+	string res = "";
+	for (vector<string>::iterator it = s.begin(); it != s.end(); ++it) { res += *it; }
+	return res;
+}
+
 int main() {
 	string testMessage = "This is a test message with lots of words, and phrases and special characters!!#~*";
 	table testTable = getFrequencies(testMessage);
@@ -101,8 +115,15 @@ int main() {
 	cout << "Frequency Table: " << endl;
 	printfTable(testTable);
 	node* huffTree = buildTree(testTable);
-	cout << "ftable size: " << testTable.size();
+	cout << "ftable size: " << testTable.size() << endl;
 	huffTable ht;
 	generateCode(huffTree, ht);
-	
+	for (huffTable::iterator it = ht.begin(); it != ht.end(); ++it) {
+		cout << it->first << "=>" << it->second << endl;
+	}
+	vector<string> enc = encode(ht, testMessage);
+	string s = convertToString(enc); 
+	cout << "encoded: " << s << endl;
+	cout << "decoded: " << decode_huff(huffTree, s);
+	delete huffTree;
 }
