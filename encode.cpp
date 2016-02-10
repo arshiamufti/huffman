@@ -11,7 +11,7 @@ Repeat steps till we get one frequency (should be equal to character length of t
 */
 
 #include "encode.h"
-
+#include "node.h"
 #include <iostream>
 #include <string>
 #include <algorithm>
@@ -81,7 +81,18 @@ node* buildTree(table& fTable) {
 	return huffTree.top();
 }
 
-
+void generateCode(node* huffTree, huffTable& codes, string code = "") {
+	if (huffTree->is_leaf()) {
+		codes[huffTree->data] =  code;
+	} else {
+	string leftCode = code;
+	leftCode += "0";
+	generateCode(huffTree->left, codes, leftCode);
+	string rightCode = code;
+	rightCode += "1";
+	generateCode(huffTree->right, codes, rightCode);
+	}
+}
 
 int main() {
 	string testMessage = "This is a test message with lots of words, and phrases and special characters!!#~*";
@@ -89,6 +100,9 @@ int main() {
 	cout << "Message: " << testMessage << endl;
 	cout << "Frequency Table: " << endl;
 	printfTable(testTable);
-	buildTree(testTable);
+	node* huffTree = buildTree(testTable);
 	cout << "ftable size: " << testTable.size();
+	huffTable ht;
+	generateCode(huffTree, ht);
+	
 }

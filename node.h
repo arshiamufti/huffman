@@ -9,6 +9,9 @@ class node {
 		node* right;
 		node(int freq, node* left, node* right):data('\0'), freq(freq), left(left), right(right) {}
 		node(char data, int freq, node* left, node* right):data(data), freq(freq), left(left), right(right) {}
+		bool is_leaf() {
+		    return !(left || right);
+		}
 		~node() { delete left; delete right; }
 };
 

@@ -1,7 +1,7 @@
 #include "node.h"
-
 #include <string>
 #include <iostream>
+
 using namespace std;
 
 // TODO: make `decode` more efficient using memoization maybe?
@@ -9,10 +9,6 @@ using namespace std;
 // TODO: read up on improvements to huffman coding
 // TODO: write better tests
 // TODO: write `encode`
-
-bool is_leaf(node * n) {
-    return !(n->left || n->right);
-}
 
 string decode_huff(node * root,string s) {
     if (!root) return "";

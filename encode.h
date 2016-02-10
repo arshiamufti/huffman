@@ -2,10 +2,12 @@
 #include <vector>
 #include <utility>
 #include <string>
+#include <map>
 
 using namespace std;
 
 typedef vector<pair<char, int> > table;
+typedef map<char, string> huffTable;
 
 void printfTable(table t);
 void insert(table &fTable, char c);
