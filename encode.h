@@ -15,4 +15,5 @@ bool comp (const pair<char, int> f, const pair<char, int> s);
 void sortByFreq(table &v);
 table getFrequencies(string message);
 node* buildTree(table& fTable);
-
+void generateCode(node* huffTree, huffTable& codes, string code = "");
+string encode(huffTable& ht, string message);

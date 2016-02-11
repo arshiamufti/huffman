@@ -80,7 +80,7 @@ node* buildTree(table& fTable) {
 	return huffTree.top();
 }
  
-void generateCode(node* huffTree, huffTable& codes, string code = "") {
+void generateCode(node* huffTree, huffTable& codes, string code) {
 	if (huffTree->is_leaf()) {
 		codes[huffTree->data] =  code;
 	} else {
@@ -93,37 +93,11 @@ void generateCode(node* huffTree, huffTable& codes, string code = "") {
 	}
 }
 
-vector<string> encode(huffTable& ht, string message) {
-	vector<string> res;
+string encode(huffTable& ht, string message) {
+	string res = "";
 	for (int i = 0; i < message.length(); ++i) {
 		char ch = message[i];
-		res.push_back(ht[ch]);
+		res += ht[ch];
 	}
 	return res;
-}
-
-string convertToString (vector<string> s) {
-	string res = "";
-	for (vector<string>::iterator it = s.begin(); it != s.end(); ++it) { res += *it; }
-	return res;
-}
-
-int main() {
-	string testMessage = "This is a test message with lots of words, and phrases and special characters!!#~*";
-	table testTable = getFrequencies(testMessage);
-	cout << "Message: " << testMessage << endl;
-	cout << "Frequency Table: " << endl;
-	printfTable(testTable);
-	node* huffTree = buildTree(testTable);
-	cout << "ftable size: " << testTable.size() << endl;
-	huffTable ht;
-	generateCode(huffTree, ht);
-	for (huffTable::iterator it = ht.begin(); it != ht.end(); ++it) {
-		cout << it->first << "=>" << it->second << endl;
-	}
-	vector<string> enc = encode(ht, testMessage);
-	string s = convertToString(enc); 
-	cout << "encoded: " << s << endl;
-	cout << "decoded: " << decode_huff(huffTree, s);
-	delete huffTree;
 }
